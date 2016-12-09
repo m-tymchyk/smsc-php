@@ -24,7 +24,7 @@ abstract class Constant
 
 
 	const SMSC_LOGIN    = 'login';
-	const SMSC_PASSWORD = 'password';
+	const SMSC_PASSWORD = 'psw';
 	const SMSC_MESSAGE  = 'mes';
 	const SMSC_PHONES   = 'phones';
 

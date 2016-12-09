@@ -2,6 +2,7 @@
 
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 use Smsc\Endpoints\MessageInterface;
 use Smsc\Exception\SmscException;
 
@@ -122,7 +123,7 @@ class Smsc
 	public function sendMessage(MessageInterface $message)
 	{
 		$params = [
-			Constant::SMSC_MESSAGE  => $message->getMessage(),
+			Constant::SMSC_MESSAGE  => urlencode($message->getMessage()),
 			Constant::SMSC_PHONES   => implode(';', $message->getPhones())
 		];
 
@@ -146,14 +147,15 @@ class Smsc
 			throw new SmscException("Invalid Method '" . $method . "'");
 		}
 		
-		$params[Constant::SMSC_LOGIN]       = $this->getLogin();
-		$params[Constant::SMSC_PASSWORD]    = $this->getPassword();
+		$params[Constant::SMSC_LOGIN]       = urlencode($this->getLogin());
+		$params[Constant::SMSC_PASSWORD]    = urlencode($this->getPassword());
 
 		$responseParams = array_merge($params, $this->getDefaultParams());
 		
 		$url = Constant::SMSC_URL . '/' . $method . ".php?" . http_build_query($responseParams);
-
-		return $this->httpClient->get($url);
+		
+		$request = new Request('GET', $url);
+		return $this->getHttpClient()->send($request);
 	}
 
 }
