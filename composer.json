@@ -1,0 +1,12 @@
+{
+	"name": "reilag/smsc",
+	"description": "PHP SDK for use SMSC HTTP API",
+	"minimum-stability": "stable",
+	"license": "proprietary",
+	"authors": [
+		{
+			"name": "Tymchyk Maksym",
+			"email": "reilag69@gmail.com"
+		}
+	]
+}
