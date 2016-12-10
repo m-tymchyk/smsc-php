@@ -123,7 +123,7 @@ class Smsc
 	public function sendMessage(MessageInterface $message)
 	{
 		$params = [
-			Constant::SMSC_MESSAGE  => urlencode($message->getMessage()),
+			Constant::SMSC_MESSAGE  => $message->getMessage(),
 			Constant::SMSC_PHONES   => implode(';', $message->getPhones())
 		];
 
@@ -147,8 +147,8 @@ class Smsc
 			throw new SmscException("Invalid Method '" . $method . "'");
 		}
 		
-		$params[Constant::SMSC_LOGIN]       = urlencode($this->getLogin());
-		$params[Constant::SMSC_PASSWORD]    = urlencode($this->getPassword());
+		$params[Constant::SMSC_LOGIN]       = $this->getLogin();
+		$params[Constant::SMSC_PASSWORD]    = $this->getPassword();
 
 		$responseParams = array_merge($params, $this->getDefaultParams());
 		
