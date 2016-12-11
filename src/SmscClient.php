@@ -121,7 +121,8 @@ class SmscClient
 	 *
 	 * @param AbstractPhoneMessage $message
 	 *
-	 * @return \Psr\Http\Message\ResponseInterface
+	 * @return array
+	 * @throws ResponseException
 	 * @throws SmscException
 	 */
 	public function sendMessage(AbstractPhoneMessage $message)
@@ -176,17 +177,16 @@ class SmscClient
 	}
 
 	/**
-	 * Send similar SMS message
+	 * Method smsMessage description.
 	 *
 	 * @param $phone
 	 * @param $message
 	 *
-	 * @return \Psr\Http\Message\ResponseInterface
+	 * @return array
 	 */
 	public final function smsMessage($phone, $message)
 	{
-		$smsMessage = new SmsMessage($phone, $message);
-		return $this->sendMessage($smsMessage);
+		return $this->sendMessage(new SmsMessage($phone, $message));
 	}
 
 }
