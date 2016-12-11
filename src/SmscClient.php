@@ -3,14 +3,16 @@
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
+use Smsc\Endpoints\AbstractPhoneMessage;
 use Smsc\Endpoints\MessageInterface;
+use Smsc\Endpoints\SmsMessage;
 use Smsc\Exception\SmscException;
 
 /**
- * Class Smsc
+ * Class SmscClient
  * @package Smsc
  */
-class Smsc
+class SmscClient
 {
 	/**
 	 * @var string
@@ -120,12 +122,14 @@ class Smsc
 	 *
 	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	public function sendMessage(MessageInterface $message)
+	public function sendMessage(AbstractPhoneMessage $message)
 	{
 		$params = [
 			Constant::SMSC_MESSAGE  => $message->getMessage(),
 			Constant::SMSC_PHONES   => implode(';', $message->getPhones())
 		];
+
+		$params = array_merge($message->getParams(), $params);
 
 		return $this->sendResponse(Constant::SMSC_METHOD_SEND, $params);
 	}
@@ -156,6 +160,20 @@ class Smsc
 		
 		$request = new Request('GET', $url);
 		return $this->getHttpClient()->send($request);
+	}
+
+	/**
+	 * Send similar SMS message
+	 *
+	 * @param $phone
+	 * @param $message
+	 *
+	 * @return \Psr\Http\Message\ResponseInterface
+	 */
+	public final function smsMessage($phone, $message)
+	{
+		$smsMessage = new SmsMessage($phone, $message);
+		return $this->sendMessage($smsMessage);
 	}
 
 }

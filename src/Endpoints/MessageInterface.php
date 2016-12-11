@@ -8,10 +8,8 @@ interface MessageInterface
 {
 	/**
 	 * MessageInterface constructor.
-	 *
-	 * @param array $phones
 	 */
-	public function __construct($phones = []);
+	public function __construct();
 
 	/**
 	 * Method getParams description.
