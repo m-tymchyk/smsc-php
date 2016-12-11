@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\Request;
 use Smsc\Endpoints\AbstractPhoneMessage;
 use Smsc\Endpoints\MessageInterface;
 use Smsc\Endpoints\SmsMessage;
+use Smsc\Exception\ResponseException;
 use Smsc\Exception\SmscException;
 
 /**
@@ -118,9 +119,10 @@ class SmscClient
 	/**
 	 * Method sendMessage description.
 	 *
-	 * @param MessageInterface $message
+	 * @param AbstractPhoneMessage $message
 	 *
 	 * @return \Psr\Http\Message\ResponseInterface
+	 * @throws SmscException
 	 */
 	public function sendMessage(AbstractPhoneMessage $message)
 	{
@@ -131,20 +133,21 @@ class SmscClient
 
 		$params = array_merge($message->getParams(), $params);
 
-		return $this->sendResponse(Constant::SMSC_METHOD_SEND, $params);
+		return $this->sendRequest(Constant::SMSC_METHOD_SEND, $params);
 	}
 
 
 	/**
-	 * Method sendResponse description.
+	 * Method sendRequest description.
 	 *
 	 * @param       $method
 	 * @param array $params
 	 *
-	 * @return \Psr\Http\Message\ResponseInterface
+	 * @return array
+	 * @throws ResponseException
 	 * @throws SmscException
 	 */
-	public function sendResponse($method, $params = [])
+	public function sendRequest($method, $params = [])
 	{
 		if( false === Constant::checkMethod($method) )
 		{
@@ -159,7 +162,17 @@ class SmscClient
 		$url = Constant::SMSC_URL . '/' . $method . ".php?" . http_build_query($responseParams);
 		
 		$request = new Request('GET', $url);
-		return $this->getHttpClient()->send($request);
+		$response = $this->getHttpClient()->send($request);
+
+		$bodyJson = $response->getBody()->getContents();
+		$resArray = json_decode($bodyJson, true);
+
+		if( isset($resArray['error']) )
+		{
+			throw new ResponseException($resArray);
+		}
+
+		return $resArray;
 	}
 
 	/**
