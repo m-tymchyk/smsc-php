@@ -8,7 +8,7 @@ Packagist: [reilag/smsc](https://packagist.org/packages/reilag/smsc)
 curl -sS https://getcomposer.org/installer | php
 
 # Add dependency
-php composer.phar require reilag/smsc:^0.1.0
+php composer.phar require reilag/smsc:^0.2.0
 ```
 
 Alternatively, you can specify SMSc as a dependency in your project's existing `composer.json` file:
@@ -16,7 +16,7 @@ Alternatively, you can specify SMSc as a dependency in your project's existing `
 ```json
 {
    "require": {
-      "reilag/smsc": "^0.1.0"
+      "reilag/smsc": "^0.2.0"
    }
 }
 ```
